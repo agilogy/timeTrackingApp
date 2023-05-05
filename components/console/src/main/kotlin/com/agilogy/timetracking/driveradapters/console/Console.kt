@@ -34,12 +34,7 @@ class Console {
 
     fun table(data: List<List<String>>, vararg columns: String): String {
         val columnLengths = columns.mapIndexed { i, header ->
-            max(
-                data.maxOfOrNull {
-                    it[i].length
-                } ?: 0,
-                header.length,
-            )
+            max(data.maxOfOrNull { it[i].length } ?: 0, header.length)
         }
         val separators = columnLengths.map { "-" * it }
         return listOf(columns.toList(), separators, * data.toTypedArray()).joinToString(separator = "\n") { row ->
