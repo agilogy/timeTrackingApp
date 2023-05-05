@@ -18,6 +18,8 @@ allprojects {
 
     // TODO: Code linting
     // TODO: Code formatting
+    // TODO: Test code coverage report
+    // TODO: Build (and publish) documentation for libraries
 
     repositories {
         mavenCentral()
