@@ -19,4 +19,3 @@ val Boolean.json: JsonPrimitive get() = JsonPrimitive(this)
 val Double.json: JsonPrimitive get() = JsonPrimitive(this)
 
 val Iterable<JsonElement>.json: JsonArray get() = JsonArray(this.toList())
-

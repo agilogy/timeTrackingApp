@@ -27,25 +27,33 @@ class TimeTrackingApi(private val timeEntriesRegister: TimeTrackingApp) {
     fun timeEntriesRoutes() {
         // GET /time-entries/daily-user-hours?userName=userName&startDate=startDate&endDate=endDate
         get("/time-entries/daily-user-hours") {
-
             Either.zipOrAccumulate(
                 call.request.queryParameters.parseRequiredParam("userName") { DeveloperName(it) },
                 call.request.queryParameters.parseRequiredParam("startDate") { LocalDate.parse(it) },
-                call.request.queryParameters.parseRequiredParam("endDate") { LocalDate.parse(it) }
+                call.request.queryParameters.parseRequiredParam("endDate") { LocalDate.parse(it) },
             ) { userName, startDate, endDate ->
                 val result = timeEntriesRegister.getDeveloperHoursByProjectAndDate(userName, startDate..endDate)
                 val jsonResult = result.map { (date, project, hours) ->
-                    jsonObject("date" to date.toString().json, "project" to project.name.json, "hours" to hours.value.json)
+                    jsonObject(
+                        "date" to date.toString().json,
+                        "project" to project.name.json,
+                        "hours" to hours.value.json,
+                    )
                 }.json
                 call.respondText(jsonResult.toString(), ContentType.Application.Json)
             }.getOrElse { errors ->
                 call.respondText(
-                    jsonObject("validationErrors" to jsonObject(errors.map { it.field to JsonPrimitive(it.description) })).toString(),
+                    jsonObject(
+                        "validationErrors" to jsonObject(
+                            errors.map {
+                                it.field to JsonPrimitive(it.description)
+                            },
+                        ),
+                    ).toString(),
                     ContentType.Application.Json,
-                    HttpStatusCode.BadRequest
+                    HttpStatusCode.BadRequest,
                 )
             }
-
         }
     }
 
@@ -56,5 +64,3 @@ class TimeTrackingApi(private val timeEntriesRegister: TimeTrackingApp) {
 }
 
 data class ValidationError(val field: String, val description: String)
-
-

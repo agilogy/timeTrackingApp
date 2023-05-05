@@ -2,9 +2,12 @@ import Dependencies.arrowCore
 import Dependencies.arrowFxCoroutines
 import Dependencies.kotestRunnerJunit
 import Dependencies.kotlinXCoroutinesCore
+import org.jlleitschuh.gradle.ktlint.KtlintExtension
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 plugins {
     (kotlin("jvm") version "1.8.21") apply false
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.2" apply false
 }
 
 // Common traits to all the projects in the build. See
@@ -27,6 +30,17 @@ allprojects {
 
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "java-test-fixtures")
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+
+    // Optionally configure plugin
+    configure<KtlintExtension> {
+        version.set("0.48.0")
+//        android.set(false)
+        outputToConsole.set(true)
+        reporters {
+            reporter(ReporterType.PLAIN)
+        }
+    }
 
     configure<JavaPluginExtension> {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -50,5 +64,4 @@ allprojects {
         "implementation"(kotlinXCoroutinesCore)
         "testImplementation"(kotestRunnerJunit)
     }
-
 }

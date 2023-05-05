@@ -24,7 +24,10 @@ class TimeTrackingAppPrd(private val timeEntriesRepository: TimeEntriesRepositor
     //  - Are the time entries under the maximum duration (let's say 12h)?
     // TODO: saveTimeEntries normalization
     //  - Merge together consecutive time entries
-    override suspend fun saveTimeEntries(developer: DeveloperName, timeEntries: List<Pair<ProjectName, ClosedRange<Instant>>>) {
+    override suspend fun saveTimeEntries(
+        developer: DeveloperName,
+        timeEntries: List<Pair<ProjectName, ClosedRange<Instant>>>,
+    ) {
         timeEntriesRepository.saveTimeEntries(timeEntries.map { TimeEntry(developer, it.first, it.second) })
     }
 
@@ -34,11 +37,11 @@ class TimeTrackingAppPrd(private val timeEntriesRepository: TimeEntriesRepositor
         timeEntriesRepository.getHoursByDeveloperAndProject(range)
 
     override suspend fun getDeveloperHoursByProjectAndDate(developer: DeveloperName, dateRange: ClosedRange<LocalDate>):
-            List<Triple<LocalDate, ProjectName, Hours>> =
+        List<Triple<LocalDate, ProjectName, Hours>> =
         timeEntriesRepository.getDeveloperHoursByProjectAndDate(developer, dateRange)
 
     override suspend fun listTimeEntries(dateRange: ClosedRange<LocalDate>, developer: DeveloperName?):
-            List<Tuple4<DeveloperName, ProjectName, LocalDate, ClosedRange<LocalTime>>> {
+        List<Tuple4<DeveloperName, ProjectName, LocalDate, ClosedRange<LocalTime>>> {
         val timeEntries = timeEntriesRepository.listTimeEntries(dateRange.toInstantRange(), developer)
         return timeEntries.flatMap { timeEntry ->
             fun row(date: LocalDate, range: ClosedRange<LocalTime>) =
@@ -47,11 +50,14 @@ class TimeTrackingAppPrd(private val timeEntriesRepository: TimeEntriesRepositor
             val res = if (timeEntry.range.endInclusive.localDate() != timeEntry.localDate) {
                 listOf(
                     row(timeEntry.localDate, timeEntry.range.start.localTime()..LocalTime.of(23, 59, 59)),
-                    row(timeEntry.localDate.plusDays(1), LocalTime.of(0, 0)..timeEntry.range.endInclusive.localTime())
+                    row(timeEntry.localDate.plusDays(1), LocalTime.of(0, 0)..timeEntry.range.endInclusive.localTime()),
                 )
             } else {
                 listOf(
-                    row(timeEntry.localDate, timeEntry.range.start.localTime()..timeEntry.range.endInclusive.localTime())
+                    row(
+                        timeEntry.localDate,
+                        timeEntry.range.start.localTime()..timeEntry.range.endInclusive.localTime(),
+                    ),
                 )
             }
             res

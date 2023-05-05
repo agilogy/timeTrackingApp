@@ -25,7 +25,9 @@ class InMemoryTimeEntriesRepository(initialState: List<TimeEntry> = emptyList())
         state.addAll(timeEntries)
     }
 
-    override suspend fun getHoursByDeveloperAndProject(range: ClosedRange<Instant>): Map<Pair<DeveloperName, ProjectName>, Hours> =
+    override suspend fun getHoursByDeveloperAndProject(
+        range: ClosedRange<Instant>,
+    ): Map<Pair<DeveloperName, ProjectName>, Hours> =
         state.filterIsIn(range)
             .groupBy({ it.developer to it.project }) { it.duration }
             .mapValues { Hours(ceil(it.value.sum().inWholeSeconds / 3_600.0).toInt()) }

@@ -24,8 +24,9 @@ object ArgsParser {
             ListTimeEntries(parseMonth(arg(1)), args.getOrElse(2) { null }?.let { DeveloperName(it) })
         } else if (arg(0) == "add") {
             AddTimeEntry(
-                DeveloperName(arg(1)), ProjectName(arg(2)),
-                parseInstant(arg(3))..parseInstant(arg(4))
+                DeveloperName(arg(1)),
+                ProjectName(arg(2)),
+                parseInstant(arg(3))..parseInstant(arg(4)),
             )
         } else raise(ArgsParseError("Unknown command ${arg(0)}"))
     }
@@ -58,5 +59,5 @@ object ArgsParser {
       report <month> <developer>                 Show the time tracking report for the given developer and month
           month: month in the format yyyy-MM
           developer: developer name
-    """.trimIndent()
+        """.trimIndent()
 }

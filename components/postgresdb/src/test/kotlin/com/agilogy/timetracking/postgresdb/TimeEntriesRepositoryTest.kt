@@ -4,7 +4,11 @@ import com.agilogy.db.hikari.HikariCp
 import com.agilogy.db.postgresql.PostgreSql
 import com.agilogy.db.sql.Sql
 import com.agilogy.db.sql.Sql.sql
-import com.agilogy.timetracking.domain.*
+import com.agilogy.timetracking.domain.DeveloperName
+import com.agilogy.timetracking.domain.Hours
+import com.agilogy.timetracking.domain.ProjectName
+import com.agilogy.timetracking.domain.TimeEntriesRepository
+import com.agilogy.timetracking.domain.TimeEntry
 import com.agilogy.timetracking.domain.test.InMemoryTimeEntriesRepository
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.core.test.TestScope
@@ -22,7 +26,11 @@ import javax.sql.DataSource
 class TimeEntriesRepositoryTest : FunSpec() {
 
     private suspend fun <A> withTestDataSource(database: String? = "test", f: suspend (DataSource) -> A) =
-        HikariCp.dataSource("jdbc:postgresql://localhost:5432/${database ?: ""}", "postgres", "postgres").use { dataSource ->
+        HikariCp.dataSource(
+            "jdbc:postgresql://localhost:5432/${database ?: ""}",
+            "postgres",
+            "postgres",
+        ).use { dataSource ->
             f(dataSource)
         }
 
@@ -36,7 +44,11 @@ class TimeEntriesRepositoryTest : FunSpec() {
             println("Recreating table time_entries")
             kotlin.runCatching { dataSource.sql { Sql.update("drop table time_entries") } }
                 .recoverIf(Unit) { it is PSQLException && it.sqlState == PostgreSql.UndefinedTable }.getOrThrow()
-            PostgresTimeEntriesRepository.dbMigrations.forEach { dbMigration -> dataSource.sql { Sql.update(dbMigration) } }
+            PostgresTimeEntriesRepository.dbMigrations.forEach { dbMigration ->
+                dataSource.sql {
+                    Sql.update(dbMigration)
+                }
+            }
             f(PostgresTimeEntriesRepository(dataSource))
         }
     }
@@ -95,16 +107,15 @@ class TimeEntriesRepositoryTest : FunSpec() {
                     TimeEntry(d1, p, timePeriod(1, 9, 4)),
                     TimeEntry(d1, p, timePeriod(1, 14, 3)),
                     TimeEntry(d2, p, timePeriod(1, 10, 3)),
-                )
+                ),
             )
             assertEquals(
                 mapOf(
                     Pair(d1, p) to Hours(7),
                     Pair(d2, p) to Hours(3),
                 ),
-                repo.getHoursByDeveloperAndProject(testDay.toLocalInstant()..testDay.plusDays(1).toLocalInstant())
+                repo.getHoursByDeveloperAndProject(testDay.toLocalInstant()..testDay.plusDays(1).toLocalInstant()),
             )
-
         }
 
         test("Get hours per developer") { repo ->
@@ -155,8 +166,12 @@ class TimeEntriesRepositoryTest : FunSpec() {
 
         test("Get hours per developer when only one part of the range is inside") { repo ->
             repo.saveTimeEntries(listOf(TimeEntry(developer, project, start..now)))
-            val resultStartInsideEndOutside = repo.getHoursByDeveloperAndProject(start.plusSeconds(1600L)..now.plusSeconds(1600L))
-            val resultStartOutsideEndInside = repo.getHoursByDeveloperAndProject(start.minusSeconds(1600L)..now.minusSeconds(1600L))
+            val resultStartInsideEndOutside = repo.getHoursByDeveloperAndProject(
+                start.plusSeconds(1600L)..now.plusSeconds(1600L),
+            )
+            val resultStartOutsideEndInside = repo.getHoursByDeveloperAndProject(
+                start.minusSeconds(1600L)..now.minusSeconds(1600L),
+            )
             val expected = mapOf((developer to project) to Hours(1))
             assertEquals(expected, resultStartInsideEndOutside)
             assertEquals(expected, resultStartOutsideEndInside)
@@ -169,18 +184,17 @@ class TimeEntriesRepositoryTest : FunSpec() {
                     TimeEntry(d1, p, timePeriod(1, 11, 2)),
                     TimeEntry(d1, p2, timePeriod(1, 14, 4)),
                     TimeEntry(d1, p, timePeriod(2, 8, 6)),
-                )
+                ),
             )
 
             assertEquals(
                 listOf(
                     Triple(date(1), p, Hours(3)),
                     Triple(date(1), p2, Hours(4)),
-                    Triple(date(2), p, Hours(6))
+                    Triple(date(2), p, Hours(6)),
                 ),
-                repo.getDeveloperHoursByProjectAndDate(d1, date(1)..date(2))
+                repo.getDeveloperHoursByProjectAndDate(d1, date(1)..date(2)),
             )
-
         }
     }
 }

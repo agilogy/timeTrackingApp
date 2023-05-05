@@ -19,7 +19,11 @@ enum class TransactionIsolationLevel(val value: Int) {
 object Sql {
 
     context(Connection)
-    private suspend fun <A> preparedStatement(sql: String, vararg params: SqlParameter, f: (PreparedStatement) -> A): A =
+    private suspend fun <A> preparedStatement(
+        sql: String,
+        vararg params: SqlParameter,
+        f: (PreparedStatement) -> A,
+    ): A =
         this@Connection.prepareStatement(sql).use { statement ->
             setParameters(statement, *params)
             f(statement)
@@ -31,7 +35,10 @@ object Sql {
         }
     }
 
-    suspend fun <A> DataSource.transaction(isolationLevel: TransactionIsolationLevel, f: context(Connection) () -> A): A =
+    suspend fun <A> DataSource.transaction(
+        isolationLevel: TransactionIsolationLevel,
+        f: context(Connection) () -> A,
+    ): A =
         withContext(Dispatchers.IO) {
             connection.use {
                 val previousAutoCommit = it.autoCommit
@@ -66,7 +73,9 @@ object Sql {
             ps.executeQuery().use { resultSet ->
                 val resultSetView = ResultSetView(resultSet)
                 if (resultSet.next()) {
-                    reader(resultSetView).also { if (resultSet.next()) throw IllegalStateException("More than one row found!") }
+                    reader(resultSetView).also {
+                        if (resultSet.next()) throw IllegalStateException("More than one row found!")
+                    }
                 } else null
             }
         }
@@ -76,7 +85,9 @@ object Sql {
     }
 
     context(Connection)
-    suspend fun update(sql: String, vararg params: SqlParameter): Int = preparedStatement(sql, *params) { it.executeUpdate() }
+    suspend fun update(sql: String, vararg params: SqlParameter): Int = preparedStatement(sql, *params) {
+        it.executeUpdate()
+    }
 
     class BatchUpdate internal constructor(private val preparedStatement: PreparedStatement) {
         fun addBatch(vararg params: SqlParameter) {

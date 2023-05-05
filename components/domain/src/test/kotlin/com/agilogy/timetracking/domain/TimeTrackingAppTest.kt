@@ -13,7 +13,6 @@ class TimeTrackingAppTest : FunSpec() {
         val developer = DeveloperName("John")
         val project = ProjectName("Acme Inc.")
 
-
         test("Save time entries") {
             val timeEntriesRepository = InMemoryTimeEntriesRepository()
             val app = TimeTrackingAppPrd(timeEntriesRepository)

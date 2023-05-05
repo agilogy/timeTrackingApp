@@ -27,8 +27,9 @@ fun <A : Comparable<A>> min(a: A, b: A) = if (a <= b) a else b
 fun Iterable<Duration>.sum(): Duration = fold(Duration.ZERO) { acc, d -> acc + d }
 
 fun YearMonth.toInstantRange(): ClosedRange<Instant> =
-    atDay(1).atStartOfDay().atZone(ZoneOffset.systemDefault()).toInstant()..
-            atEndOfMonth().atTime(23, 59, 59).atZone(ZoneOffset.systemDefault()).toInstant()
+    atDay(1).atStartOfDay().atZone(ZoneOffset.systemDefault()).toInstant()..atEndOfMonth().atTime(23, 59, 59).atZone(
+        ZoneOffset.systemDefault(),
+    ).toInstant()
 
 fun YearMonth.toLocalDateRange(): ClosedRange<LocalDate> =
     atDay(1)..atEndOfMonth()

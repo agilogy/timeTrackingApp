@@ -11,4 +11,8 @@ object Help : Command
 data class GlobalReport(val yearMonth: YearMonth) : Command
 data class DeveloperReport(val yearMonth: YearMonth, val developer: DeveloperName) : Command
 data class ListTimeEntries(val yearMonth: YearMonth, val developer: DeveloperName?) : Command
-data class AddTimeEntry(val developer: DeveloperName, val project: ProjectName, val range: ClosedRange<Instant>) : Command
+data class AddTimeEntry(
+    val developer: DeveloperName,
+    val project: ProjectName,
+    val range: ClosedRange<Instant>,
+) : Command

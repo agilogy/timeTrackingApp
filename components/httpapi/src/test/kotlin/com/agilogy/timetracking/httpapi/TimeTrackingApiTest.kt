@@ -44,7 +44,10 @@ class TimeTrackingApiTest : FunSpec() {
         test("return OK with an empty list of entries") {
             withApp { client ->
                 val response =
-                    client.get("/time-entries/daily-user-hours?userName=${john.name}&startDate=$startOfMonth&endDate=$endOfMonth")
+                    client.get(
+                        "/time-entries/daily-user-hours?" +
+                            "userName=${john.name}&startDate=$startOfMonth&endDate=$endOfMonth",
+                    )
                 assertEquals(HttpStatusCode.OK, response.status, response.bodyAsText())
                 assertEquals(jsonArray().toString(), response.bodyAsText())
             }
@@ -55,12 +58,21 @@ class TimeTrackingApiTest : FunSpec() {
             val startDate = startTime.localDate()
             withApp(TimeEntry(john, agilogySchool, startTime..now)) { client ->
                 val response =
-                    client.get("/time-entries/daily-user-hours?userName=${john.name}&startDate=$startOfMonth&endDate=$endOfMonth")
+                    client.get(
+                        "/time-entries/daily-user-hours?" +
+                            "userName=${john.name}&startDate=$startOfMonth&endDate=$endOfMonth",
+                    )
                 assertEquals(HttpStatusCode.OK, response.status, response.bodyAsText())
                 assertEquals(
-                    jsonArray(jsonObject("date" to startDate.toString().json, "project" to "Agilogy school".json, "hours" to 2.json))
+                    jsonArray(
+                        jsonObject(
+                            "date" to startDate.toString().json,
+                            "project" to "Agilogy school".json,
+                            "hours" to 2.json,
+                        ),
+                    )
                         .toString(),
-                    response.bodyAsText()
+                    response.bodyAsText(),
                 )
             }
         }

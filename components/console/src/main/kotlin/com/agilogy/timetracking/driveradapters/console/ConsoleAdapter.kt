@@ -19,7 +19,7 @@ class ConsoleAdapter(
             },
             {
                 println("Command executed successfully")
-            }
+            },
         )
 
     private suspend fun runCommand(cmd: Command) {
@@ -30,13 +30,18 @@ class ConsoleAdapter(
             }
 
             is DeveloperReport -> {
-                val report = timeTrackingApp.getDeveloperHoursByProjectAndDate(cmd.developer, cmd.yearMonth.toLocalDateRange())
+                val report = timeTrackingApp.getDeveloperHoursByProjectAndDate(
+                    cmd.developer,
+                    cmd.yearMonth.toLocalDateRange(),
+                )
                 console.print(report)
             }
 
             Help -> console.printHelp(ArgsParser.help())
             is ListTimeEntries ->
-                console.printTimeEntries(timeTrackingApp.listTimeEntries(cmd.yearMonth.toLocalDateRange(), cmd.developer))
+                console.printTimeEntries(
+                    timeTrackingApp.listTimeEntries(cmd.yearMonth.toLocalDateRange(), cmd.developer),
+                )
 
             is AddTimeEntry -> timeTrackingApp.saveTimeEntries(cmd.developer, listOf(cmd.project to cmd.range))
         }

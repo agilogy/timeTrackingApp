@@ -15,7 +15,9 @@ class Console {
     fun print(report: Map<Pair<DeveloperName, ProjectName>, Hours>) {
         val table = table(
             report.map { (dp, hours) -> listOf(dp.first.name, dp.second.name, hours.value.toString()) },
-            "Developer", "Project", "Hours"
+            "Developer",
+            "Project",
+            "Hours",
         )
         println(table)
     }
@@ -23,13 +25,22 @@ class Console {
     fun print(report: List<Triple<LocalDate, ProjectName, Hours>>) {
         val table = table(
             report.map { (date, project, hours) -> listOf(date.toString(), project.name, hours.value.toString()) },
-            "Date", "Project", "Hours"
+            "Date",
+            "Project",
+            "Hours",
         )
         println(table)
     }
 
     fun table(data: List<List<String>>, vararg columns: String): String {
-        val columnLengths = columns.mapIndexed { i, header -> max(data.maxOfOrNull { it[i].length } ?: 0, header.length) }
+        val columnLengths = columns.mapIndexed { i, header ->
+            max(
+                data.maxOfOrNull {
+                    it[i].length
+                } ?: 0,
+                header.length,
+            )
+        }
         val separators = columnLengths.map { "-" * it }
         return listOf(columns.toList(), separators, * data.toTypedArray()).joinToString(separator = "\n") { row ->
             row.zip(columnLengths).joinToString(" ") { (value, length) -> value.padEnd(length) }
@@ -38,7 +49,9 @@ class Console {
 
     private operator fun String.times(n: Int): String = repeat(n)
 
-    fun printTimeEntries(listTimeEntries: List<Tuple4<DeveloperName, ProjectName, LocalDate, ClosedRange<LocalTime>>>): Unit = println(
+    fun printTimeEntries(
+        listTimeEntries: List<Tuple4<DeveloperName, ProjectName, LocalDate, ClosedRange<LocalTime>>>,
+    ): Unit = println(
         table(
             listTimeEntries.map { (developer, project, date, range) ->
                 listOf(
@@ -46,10 +59,14 @@ class Console {
                     project.name,
                     date.toString(),
                     range.start.toString(),
-                    range.endInclusive.toString()
+                    range.endInclusive.toString(),
                 )
             },
-            "Developer", "Project", "Date", "Start", "End"
-        )
+            "Developer",
+            "Project",
+            "Date",
+            "Start",
+            "End",
+        ),
     )
 }

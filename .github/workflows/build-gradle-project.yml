@@ -9,12 +9,6 @@ jobs:
     steps:
       - name: Checkout project sources
         uses: actions/checkout@v3
-      - name: Docker Compose up
-        uses: isbang/compose-action@v1.4.1
-        with:
-          compose-file: "./docker-compose.yml"
-          down-flags: "--volumes"
-      # https://github.com/gradle/gradle-build-action
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -22,5 +16,15 @@ jobs:
           java-version: 17
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+      - name: Gradle assemble
+        run: ./gradlew assemble
+      - name: Check code style
+        run: ./gradlew ktlintCheck
+      - name: Docker Compose up
+        uses: isbang/compose-action@v1.4.1
+        with:
+          compose-file: "./docker-compose.yml"
+          down-flags: "--volumes"
+      # https://github.com/gradle/gradle-build-action
       - name: Gradle Build
         run: ./gradlew build
