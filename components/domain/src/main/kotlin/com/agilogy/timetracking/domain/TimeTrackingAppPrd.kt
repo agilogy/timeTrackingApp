@@ -38,7 +38,7 @@ class TimeTrackingAppPrd(private val timeEntriesRepository: TimeEntriesRepositor
 
     override suspend fun getDeveloperHoursByProjectAndDate(developer: DeveloperName, dateRange: ClosedRange<LocalDate>):
         List<Triple<LocalDate, ProjectName, Hours>> =
-        timeEntriesRepository.getDeveloperHoursByProjectAndDate(developer, dateRange) + emptyList()
+        timeEntriesRepository.getDeveloperHoursByProjectAndDate(developer, dateRange)
 
     override suspend fun listTimeEntries(dateRange: ClosedRange<LocalDate>, developer: DeveloperName?):
         List<Tuple4<DeveloperName, ProjectName, LocalDate, ClosedRange<LocalTime>>> {

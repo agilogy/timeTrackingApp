@@ -12,3 +12,4 @@ To setup your tools:
 While developing:
 
 - `./gradlew --continue ktlintFormat` to format code
+- `./gradlew koverHtmlReport` to generate and open the test coverage report
