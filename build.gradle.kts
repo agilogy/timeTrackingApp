@@ -2,6 +2,7 @@ import Dependencies.arrowCore
 import Dependencies.arrowFxCoroutines
 import Dependencies.kotestRunnerJunit
 import Dependencies.kotlinXCoroutinesCore
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
@@ -46,7 +47,7 @@ allprojects {
         sourceCompatibility = JavaVersion.VERSION_17
     }
 
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_17.toString()
             allWarningsAsErrors = true
