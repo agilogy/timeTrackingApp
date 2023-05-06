@@ -1,4 +1,4 @@
-package com.agilogy.timetracking.postgresdb
+package com.agilogy.timetracking.drivenadapters.postgresdb
 
 import com.agilogy.db.sql.ResultSetView
 import com.agilogy.db.sql.Sql.batchUpdate

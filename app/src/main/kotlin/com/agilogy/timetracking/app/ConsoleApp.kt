@@ -1,4 +1,4 @@
-package com.agilogy.timetracking
+package com.agilogy.timetracking.app
 
 import com.agilogy.timetracking.driveradapters.console.ConsoleAdapter
 
