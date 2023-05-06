@@ -8,6 +8,7 @@ import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 plugins {
     (kotlin("jvm") version "1.8.21") apply false
     id("org.jlleitschuh.gradle.ktlint") version "11.3.2" apply false
+    id("org.jetbrains.kotlinx.kover") version "0.7.0-Beta"
 }
 
 // Common traits to all the projects in the build. See
@@ -29,6 +30,7 @@ allprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "java-test-fixtures")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
+    apply(plugin = "org.jetbrains.kotlinx.kover")
 
     // Optionally configure plugin
     configure<KtlintExtension> {
@@ -61,5 +63,27 @@ allprojects {
         "implementation"(arrowFxCoroutines)
         "implementation"(kotlinXCoroutinesCore)
         "testImplementation"(kotestRunnerJunit)
+    }
+}
+
+kover {
+    useKoverTool()
+}
+
+dependencies {
+    File("$rootDir/components/").listFiles()!!.filter { it.isDirectory }.map { it.name }
+        .forEach { kover(project(":$it")) }
+
+    File("$rootDir/libs/").listFiles()!!.filter { it.isDirectory }.map { it.name }
+        .forEach { kover(project(":$it")) }
+
+    kover(project(":app"))
+}
+
+koverReport {
+    filters {
+        includes {
+            classes("com.agilogy.*")
+        }
     }
 }

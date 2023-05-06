@@ -17,8 +17,6 @@ jobs:
       # https://github.com/gradle/gradle-build-action
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-      - name: Gradle assemble
-        run: ./gradlew assemble
       - name: Check code style
         run: ./gradlew ktlintCheck
       - name: Docker Compose up
