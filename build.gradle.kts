@@ -19,8 +19,6 @@ allprojects {
     group = "com.agilogy"
     version = "1.0-SNAPSHOT"
 
-    // TODO: Code linting
-    // TODO: Code formatting
     // TODO: Test code coverage report
     // TODO: Build (and publish) documentation for libraries
 
@@ -34,7 +32,7 @@ allprojects {
 
     // Optionally configure plugin
     configure<KtlintExtension> {
-        version.set("0.48.0")
+        version.set("0.48.2")
 //        android.set(false)
         outputToConsole.set(true)
         reporters {

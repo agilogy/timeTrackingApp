@@ -13,13 +13,8 @@ class ConsoleAdapter(
 
     suspend fun main(args: Array<String>) =
         effect { runCommand(ArgsParser.parse(args)) }.fold(
-            {
-                println(it.message)
-                runCommand(Help)
-            },
-            {
-                println("Command executed successfully")
-            },
+            { println(it.message); runCommand(Help) },
+            { println("Command executed successfully") },
         )
 
     private suspend fun runCommand(cmd: Command) {
@@ -30,10 +25,8 @@ class ConsoleAdapter(
             }
 
             is DeveloperReport -> {
-                val report = timeTrackingApp.getDeveloperHoursByProjectAndDate(
-                    cmd.developer,
-                    cmd.yearMonth.toLocalDateRange(),
-                )
+                val report =
+                    timeTrackingApp.getDeveloperHoursByProjectAndDate(cmd.developer, cmd.yearMonth.toLocalDateRange())
                 console.print(report)
             }
 
