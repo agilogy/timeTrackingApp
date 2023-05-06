@@ -1,4 +1,4 @@
-package com.agilogy.timetracking
+package com.agilogy.timetracking.app
 
 import arrow.continuations.ktor.server
 import com.agilogy.timetracking.driveradapters.httpapi.TimeTrackingApi

@@ -11,7 +11,7 @@ plugins {
 }
 
 application {
-    mainClass.set("com.agilogy.timetracking.ConsoleAppKt")
+    mainClass.set("com.agilogy.timetracking.app.ConsoleAppKt")
 }
 
 dependencies {

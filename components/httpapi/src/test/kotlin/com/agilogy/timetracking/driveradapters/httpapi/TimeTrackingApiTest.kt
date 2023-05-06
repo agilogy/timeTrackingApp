@@ -1,4 +1,4 @@
-package com.agilogy.timetracking.httpapi
+package com.agilogy.timetracking.driveradapters.httpapi
 
 import com.agilogy.json.json
 import com.agilogy.json.jsonArray
@@ -9,7 +9,6 @@ import com.agilogy.timetracking.domain.TimeEntry
 import com.agilogy.timetracking.domain.TimeTrackingAppPrd
 import com.agilogy.timetracking.domain.localDate
 import com.agilogy.timetracking.domain.test.InMemoryTimeEntriesRepository
-import com.agilogy.timetracking.driveradapters.httpapi.TimeTrackingApi
 import io.kotest.core.spec.style.FunSpec
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get

@@ -20,7 +20,7 @@ allprojects {
     group = "com.agilogy"
     version = "1.0-SNAPSHOT"
 
-    // TODO: Test code coverage report
+    // TODO: Publish test code coverage report
     // TODO: Build (and publish) documentation for libraries
 
     repositories {

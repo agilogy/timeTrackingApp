@@ -1,4 +1,4 @@
-package com.agilogy.timetracking
+package com.agilogy.timetracking.app
 
 import arrow.continuations.SuspendApp
 import arrow.fx.coroutines.ResourceScope
