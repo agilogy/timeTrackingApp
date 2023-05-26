@@ -44,15 +44,15 @@ class PostgresTimeEntriesRepository(private val dataSource: DataSource) : TimeEn
     }
 
     override suspend fun saveTimeEntries(timeEntries: List<TimeEntry>) = dataSource.sql {
-        val sql = """insert into time_entries(developer, project, start, "end") values (?, ?, ?, ?)"""
+        val sql = """insert into time_entries(developer, project, start, "end", zone_id) values (?, ?, ?, ?, ?)"""
         batchUpdate(sql) {
             timeEntries.forEach {
                 addBatch(
                     it.developer.param,
                     it.project.param,
                     it.range.start.param,
-                    it.range.endInclusive
-                        .param,
+                    it.range.endInclusive.param,
+                    it.zoneId.id.param
                 )
             }
         }
