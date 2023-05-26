@@ -4,6 +4,7 @@ import arrow.core.Tuple4
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.ZoneId
 
 // TODO: Redesign TimeTrackingAppPrd dates:
 //  - Report parameters should use LocalDate, Month, etc. and a(n optional?) user timezone
@@ -26,9 +27,9 @@ class TimeTrackingAppPrd(private val timeEntriesRepository: TimeEntriesRepositor
     //  - Merge together consecutive time entries
     override suspend fun saveTimeEntries(
         developer: DeveloperName,
-        timeEntries: List<Pair<ProjectName, ClosedRange<Instant>>>,
+        timeEntries: List<Triple<ProjectName, ClosedRange<Instant>, ZoneId>>,
     ) {
-        timeEntriesRepository.saveTimeEntries(timeEntries.map { TimeEntry(developer, it.first, it.second) })
+        timeEntriesRepository.saveTimeEntries(timeEntries.map { TimeEntry(developer, it.first, it.second, it.third) })
     }
 
     // TODO: Redesign getDeveloperHours to take a ClosedRange<LocalDate> and a timezone

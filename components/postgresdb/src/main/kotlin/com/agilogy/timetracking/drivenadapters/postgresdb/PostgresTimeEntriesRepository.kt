@@ -14,6 +14,7 @@ import com.agilogy.timetracking.domain.TimeEntry
 import com.agilogy.timetracking.domain.toInstantRange
 import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import javax.sql.DataSource
 import kotlin.math.ceil
 
@@ -37,6 +38,8 @@ class PostgresTimeEntriesRepository(private val dataSource: DataSource) : TimeEn
             |"end" timestamptz not null
            )
             """.trimMargin(),
+            """alter table time_entries add column zone_id text not null default 'Europe/Madrid'""",
+            """alter table time_entries alter column zone_id drop default"""
         )
     }
 
@@ -93,12 +96,12 @@ class PostgresTimeEntriesRepository(private val dataSource: DataSource) : TimeEn
 
     override suspend fun listTimeEntries(timeRange: ClosedRange<Instant>, developer: DeveloperName?): List<TimeEntry> =
         dataSource.sql {
-            val sql = """select developer, project, start, "end" 
+            val sql = """select developer, project, start, "end", zone_id 
             |from time_entries 
             |where "end" > ? and start < ?
             """.trimMargin()
             select(sql, timeRange.start.param, timeRange.endInclusive.param) {
-                TimeEntry(it.developer(1)!!, it.project(2)!!, it.timestamp(3)!!..it.timestamp(4)!!)
+                TimeEntry(it.developer(1)!!, it.project(2)!!, it.timestamp(3)!!..it.timestamp(4)!!, ZoneId.of(it.string(5)!!))
             }
         }
 }

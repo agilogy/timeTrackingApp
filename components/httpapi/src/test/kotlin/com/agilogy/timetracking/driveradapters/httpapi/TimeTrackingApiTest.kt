@@ -18,6 +18,7 @@ import io.ktor.server.testing.testApplication
 import org.junit.jupiter.api.Assertions.assertEquals
 import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
 class TimeTrackingApiTest : FunSpec() {
@@ -55,7 +56,8 @@ class TimeTrackingApiTest : FunSpec() {
         test("return OK with a not empty list of entries") {
             val startTime = now.minus(2, ChronoUnit.HOURS)
             val startDate = startTime.localDate()
-            withApp(TimeEntry(john, agilogySchool, startTime..now)) { client ->
+            val zoneId = ZoneId.of("Australia/Sydney")
+            withApp(TimeEntry(john, agilogySchool, startTime..now, zoneId)) { client ->
                 val response =
                     client.get(
                         "/time-entries/daily-user-hours?" +

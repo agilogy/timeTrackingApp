@@ -36,7 +36,8 @@ class ConsoleAdapter(
                     timeTrackingApp.listTimeEntries(cmd.yearMonth.toLocalDateRange(), cmd.developer),
                 )
 
-            is AddTimeEntry -> timeTrackingApp.saveTimeEntries(cmd.developer, listOf(cmd.project to cmd.range))
+            is AddTimeEntry -> //timeTrackingApp.saveTimeEntries(cmd.developer, listOf(cmd.project to cmd.range))
+                TODO("Not implemented: missing time zone id")
         }
     }
 }
