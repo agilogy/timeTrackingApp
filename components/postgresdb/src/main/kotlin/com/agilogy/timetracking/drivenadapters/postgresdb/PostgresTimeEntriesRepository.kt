@@ -39,7 +39,7 @@ class PostgresTimeEntriesRepository(private val dataSource: DataSource) : TimeEn
            )
             """.trimMargin(),
             """alter table time_entries add column zone_id text not null default 'Europe/Madrid'""",
-            """alter table time_entries alter column zone_id drop default"""
+            """alter table time_entries alter column zone_id drop default""",
         )
     }
 
@@ -52,7 +52,7 @@ class PostgresTimeEntriesRepository(private val dataSource: DataSource) : TimeEn
                     it.project.param,
                     it.range.start.param,
                     it.range.endInclusive.param,
-                    it.zoneId.id.param
+                    it.zoneId.id.param,
                 )
             }
         }
@@ -101,7 +101,12 @@ class PostgresTimeEntriesRepository(private val dataSource: DataSource) : TimeEn
             |where "end" > ? and start < ?
             """.trimMargin()
             select(sql, timeRange.start.param, timeRange.endInclusive.param) {
-                TimeEntry(it.developer(1)!!, it.project(2)!!, it.timestamp(3)!!..it.timestamp(4)!!, ZoneId.of(it.string(5)!!))
+                TimeEntry(
+                    it.developer(1)!!,
+                    it.project(2)!!,
+                    it.timestamp(3)!!..it.timestamp(4)!!,
+                    ZoneId.of(it.string(5)!!),
+                )
             }
         }
 }

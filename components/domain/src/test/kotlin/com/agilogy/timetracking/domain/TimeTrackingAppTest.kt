@@ -25,12 +25,16 @@ class TimeTrackingAppTest : FunSpec() {
         }
 
         test("Get hours per developer") {
-            val timeEntriesRepository = InMemoryTimeEntriesRepository(listOf(TimeEntry(
-                developer,
-                project,
-                start..now,
-                zoneId
-            )))
+            val timeEntriesRepository = InMemoryTimeEntriesRepository(
+                listOf(
+                    TimeEntry(
+                        developer,
+                        project,
+                        start..now,
+                        zoneId,
+                    ),
+                ),
+            )
             val app = TimeTrackingAppPrd(timeEntriesRepository)
             val result = app.getDeveloperHours(start..now)
             val expected = mapOf((developer to project) to Hours(hours))

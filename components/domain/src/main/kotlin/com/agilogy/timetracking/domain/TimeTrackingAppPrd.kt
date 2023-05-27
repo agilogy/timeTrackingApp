@@ -1,6 +1,6 @@
 package com.agilogy.timetracking.domain
 
-import arrow.core.Tuple4
+import arrow.core.Tuple5
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -42,22 +42,32 @@ class TimeTrackingAppPrd(private val timeEntriesRepository: TimeEntriesRepositor
         timeEntriesRepository.getDeveloperHoursByProjectAndDate(developer, dateRange)
 
     override suspend fun listTimeEntries(dateRange: ClosedRange<LocalDate>, developer: DeveloperName?):
-        List<Tuple4<DeveloperName, ProjectName, LocalDate, ClosedRange<LocalTime>>> {
+        List<Tuple5<DeveloperName, ProjectName, LocalDate, ClosedRange<LocalTime>, ZoneId>> {
         val timeEntries = timeEntriesRepository.listTimeEntries(dateRange.toInstantRange(), developer)
         return timeEntries.flatMap { timeEntry ->
-            fun row(date: LocalDate, range: ClosedRange<LocalTime>) =
-                Tuple4(timeEntry.developer, timeEntry.project, date, range)
+            fun row(date: LocalDate, range: ClosedRange<LocalTime>, zoneId: ZoneId) =
+                Tuple5(timeEntry.developer, timeEntry.project, date, range, zoneId)
 
             val res = if (timeEntry.range.endInclusive.localDate() != timeEntry.localDate) {
                 listOf(
-                    row(timeEntry.localDate, timeEntry.range.start.localTime()..LocalTime.of(23, 59, 59)),
-                    row(timeEntry.localDate.plusDays(1), LocalTime.of(0, 0)..timeEntry.range.endInclusive.localTime()),
+                    row(
+                        timeEntry.localDate,
+                        timeEntry.range.start.localTime()..LocalTime.of(23, 59, 59),
+                        timeEntry.zoneId,
+                    ),
+
+                    row(
+                        timeEntry.localDate.plusDays(1),
+                        LocalTime.of(0, 0)..timeEntry.range.endInclusive.localTime(),
+                        timeEntry.zoneId,
+                    ),
                 )
             } else {
                 listOf(
                     row(
                         timeEntry.localDate,
                         timeEntry.range.start.localTime()..timeEntry.range.endInclusive.localTime(),
+                        timeEntry.zoneId,
                     ),
                 )
             }
