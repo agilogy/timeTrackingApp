@@ -4,6 +4,7 @@ import com.agilogy.timetracking.domain.DeveloperName
 import com.agilogy.timetracking.domain.ProjectName
 import java.time.Instant
 import java.time.YearMonth
+import java.time.ZoneId
 
 sealed interface Command
 
@@ -15,4 +16,5 @@ data class AddTimeEntry(
     val developer: DeveloperName,
     val project: ProjectName,
     val range: ClosedRange<Instant>,
+    val zoneId: ZoneId,
 ) : Command

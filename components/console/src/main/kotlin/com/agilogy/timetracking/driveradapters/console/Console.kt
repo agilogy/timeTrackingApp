@@ -1,11 +1,12 @@
 package com.agilogy.timetracking.driveradapters.console
 
-import arrow.core.Tuple4
+import arrow.core.Tuple5
 import com.agilogy.timetracking.domain.DeveloperName
 import com.agilogy.timetracking.domain.Hours
 import com.agilogy.timetracking.domain.ProjectName
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.ZoneId
 import kotlin.math.max
 
 class Console {
@@ -45,16 +46,17 @@ class Console {
     private operator fun String.times(n: Int): String = repeat(n)
 
     fun printTimeEntries(
-        listTimeEntries: List<Tuple4<DeveloperName, ProjectName, LocalDate, ClosedRange<LocalTime>>>,
+        listTimeEntries: List<Tuple5<DeveloperName, ProjectName, LocalDate, ClosedRange<LocalTime>, ZoneId>>,
     ): Unit = println(
         table(
-            listTimeEntries.map { (developer, project, date, range) ->
+            listTimeEntries.map { (developer, project, date, range, zoneId) ->
                 listOf(
                     developer.name,
                     project.name,
                     date.toString(),
                     range.start.toString(),
                     range.endInclusive.toString(),
+                    zoneId.id,
                 )
             },
             "Developer",
@@ -62,6 +64,7 @@ class Console {
             "Date",
             "Start",
             "End",
+            "ZoneId",
         ),
     )
 }

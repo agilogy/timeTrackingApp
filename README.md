@@ -13,3 +13,7 @@ While developing:
 
 - `./gradlew --continue ktlintFormat` to format code
 - `./gradlew koverHtmlReport` to generate and open the test coverage report
+
+To test your code:
+- `docker-compose up`
+- `./gradlew test`
