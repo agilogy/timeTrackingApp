@@ -15,5 +15,6 @@ While developing:
 - `./gradlew koverHtmlReport` to generate and open the test coverage report
 
 To test your code:
+
 - `docker-compose up`
 - `./gradlew test`
