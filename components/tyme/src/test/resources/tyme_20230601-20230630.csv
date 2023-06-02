@@ -1,0 +1,6 @@
+type;date;unix_start;unix_end;day;start;end;category;project;task;subtask;amount;amount_decimal;rate;sum;rounding_minutes;rounding_method;note
+timed;1/6/23;1685603340;1685622300;Thursday;09:09;14:25;;ProjectA;TaskA1;;05:16;5,26666667;;;1;NEAREST;""
+timed;1/6/23;1685625655;1685635185;Thursday;15:20;17:59;;ProjectA;TaskA2;;02:39;2,65;;;1;NEAREST;""
+timed;2/6/23;1685689440;1685693700;Friday;09:04;10:15;;ProjectA;TaskA1;;01:11;1,18333333;;;1;NEAREST;""
+timed;2/6/23;1685693700;1685709000;Friday;10:15;14:30;;ProjectB;TaskB1;;04:15;4,25;;;1;NEAREST;""
+timed;2/6/23;1685710800;1685712666;Friday;15:00;15:31;;ProjectB;TaskB2;;00:31;0,51666667;;;1;NEAREST;""
