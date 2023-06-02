@@ -25,10 +25,6 @@ import javax.sql.DataSource
 
 class TimeEntriesRepositoryTest : FunSpec() {
 
-    // To execute test in local:
-    // docker pull postgres
-    // docker run --name postgres_timetrackingapp -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres
-
     private suspend fun <A> withTestDataSource(database: String? = "test", f: suspend (DataSource) -> A) =
         HikariCp.dataSource(
             "jdbc:postgresql://localhost:5432/${database ?: ""}",
