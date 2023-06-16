@@ -3,12 +3,13 @@ package com.agilogy.timetracking.toggl
 import com.agilogy.timetracking.domain.ProjectName
 import io.kotest.core.spec.style.FunSpec
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.assertThrows
 import java.time.Instant
 import java.time.ZoneId
 
 class TogglTest : FunSpec() {
     init {
-        test("TODO") {
+        test("parses a toggle csv") {
             this::class.java.getResourceAsStream("/togglTimeEntries.csv").use { inputStream ->
                 val zoneId = ZoneId.of("Europe/Madrid")
                 val result: List<Triple<ProjectName, ClosedRange<Instant>, ZoneId>> = readTogglCsv(
@@ -43,6 +44,14 @@ class TogglTest : FunSpec() {
                     ),
                 )
                 assertEquals(expected, result)
+            }
+        }
+        test("throws TogglInvalidTimeEntry on invalid toggle csv") {
+            this::class.java.getResourceAsStream("/InvalidtogglTimeEntries.csv").use { inputStream ->
+                val zoneId = ZoneId.of("Europe/Madrid")
+                assertThrows<TogglInvalidTimeEntry> {
+                    readTogglCsv(inputStream!!, zoneId)
+                }
             }
         }
     }
