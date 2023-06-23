@@ -1,11 +1,12 @@
 .PHONY: build
 build:
 	./gradlew build
-	docker build app/. -t agilogy/time-tracking-app:latest
+
 
 .PHONY: deploy
 deploy:
-	make build
+	./gradlew build -x test -x lintKotlin
+	docker build app/. -t agilogy/time-tracking-app:latest
 	heroku container:login
 	docker tag agilogy/time-tracking-app:latest registry.heroku.com/agilogy-time-tracking/web
 	docker push registry.heroku.com/agilogy-time-tracking/web
