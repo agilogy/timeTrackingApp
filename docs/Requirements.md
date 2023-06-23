@@ -1,22 +1,19 @@
 # Requirements
 
-## Non functional requirements
+## Requirements (as epics)
 
-- [ ] The application is deployed in a cloud provider
-- [ ] The application is usable via an HTTP API in Json
-- [ ] Remove the example console application
-
-### The application is deployed in a cloud provider
-
-- [ ] Deploy on Heroku
-- [ ] Github actions to deploy on Heroku every time a PR is merged into main
-
-## Functional Requirements (as epics)
-
-- [ ] Inform time entries
+- [ ] Initial setup  (see below)
+- [ ] Authentication & Authorization (see below)
+- [ ] Inform time entries  (see below)
 - [ ] Listing of my own time entries
-- [ ] Invoicing report
-- [ ] Authentication & Authorization
+- [ ] Invoicing report  (see below)
+
+## Initial setup
+
+- [x] The application is deployed in Heroku
+- [x] The application is usable via an HTTP API in Json
+- [ ] Remove the example console application
+- [ ] The application runs the migrations on each deployment / start up
 
 ### Inform time entries
 
