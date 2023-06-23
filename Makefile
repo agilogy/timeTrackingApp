@@ -2,6 +2,9 @@
 build:
 	./gradlew build
 
+.PHONY: test
+test:
+	./gradlew test
 
 .PHONY: deploy
 deploy:
