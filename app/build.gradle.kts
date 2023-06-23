@@ -13,7 +13,7 @@ plugins {
 
 tasks.withType<Jar> {
     manifest {
-        attributes["Main-Class"] = "com.agilogy.timetracking.app.ConsoleAppKt"
+        attributes["Main-Class"] = "com.agilogy.timetracking.app.ApiServerKt"
     }
     // To avoid the duplicate handling strategy error
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
