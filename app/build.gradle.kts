@@ -27,7 +27,7 @@ tasks.withType<Jar> {
     })
 }
 application {
-    mainClass.set("com.agilogy.timetracking.app.ConsoleAppKt")
+    mainClass.set("com.agilogy.timetracking.app.AppKt")
 }
 
 dependencies {
@@ -36,7 +36,6 @@ dependencies {
     implementation(ktorServerNetty)
     implementation(project(":db"))
     implementation(project(":domain"))
-    implementation(project(":console"))
     implementation(project(":postgresdb"))
     implementation(project(":httpapi"))
     implementation(suspendApp)
