@@ -30,7 +30,7 @@
 
 - [x] The application is deployed in Heroku
 - [x] The application is usable via an HTTP API in Json
-- [ ] Remove the example console application
+- [x] Remove the example console application
 - [ ] The application runs the migrations on each deployment / start up
 
 ### Inform time entries
