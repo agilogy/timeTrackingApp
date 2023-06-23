@@ -4,14 +4,8 @@ import arrow.fx.coroutines.ResourceScope
 import com.agilogy.db.hikari.HikariCp
 import com.agilogy.timetracking.domain.TimeTrackingAppPrd
 import com.agilogy.timetracking.drivenadapters.postgresdb.PostgresTimeEntriesRepository
-import java.net.URI
 
-suspend fun ResourceScope.timeTrackingApp(): TimeTrackingAppPrd {
-    val dbUri = URI(System.getenv("DATABASE_URL"))
-
-    val (username, password) = dbUri.userInfo.split(":")
-    val jdbcUrl = "jdbc:postgresql://" + dbUri.host + ':' + dbUri.port + dbUri.path
-
+suspend fun ResourceScope.timeTrackingApp(jdbcUrl: String, username: String, password: String): TimeTrackingAppPrd {
     val dataSource = HikariCp.dataSource(jdbcUrl, username, password).bind()
     val repo = PostgresTimeEntriesRepository(dataSource)
     return TimeTrackingAppPrd(repo)
