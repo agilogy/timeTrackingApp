@@ -32,6 +32,8 @@
 - [x] The application is usable via an HTTP API in Json
 - [x] Remove the example console application
 - [ ] The application runs the migrations on each deployment / start up
+- [ ] The migrations are run before executing tests
+- [ ] Find the best way to run one-off dynos to run migrations
 
 ### Inform time entries
 
