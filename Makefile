@@ -16,5 +16,6 @@ deploy:
 	docker tag agilogy/time-tracking-migrations:latest registry.heroku.com/agilogy-time-tracking/migrations
 	docker push registry.heroku.com/agilogy-time-tracking/web
 	docker push registry.heroku.com/agilogy-time-tracking/migrations
-	heroku container:release web migrations -a agilogy-time-tracking
+	heroku container:release migrations -a agilogy-time-tracking
 	heroku run "migrations" -a agilogy-time-tracking --type=migrations
+	heroku container:release web -a agilogy-time-tracking
