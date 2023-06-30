@@ -72,13 +72,16 @@ kover {
 }
 
 dependencies {
-    File("$rootDir/components/").listFiles()!!.filter { it.isDirectory }.map { it.name }
-        .forEach { kover(project(":$it")) }
 
-    File("$rootDir/libs/").listFiles()!!.filter { it.isDirectory }.map { it.name }
-        .forEach { kover(project(":$it")) }
+    fun String.scanApps() =
+        File("$rootDir/${this@scanApps}/").listFiles()!!.filter { it.isDirectory }.map { it.name }
+            .forEach { (project(":$it")) }
 
-    kover(project(":app"))
+    "components".scanApps()
+    "libs".scanApps()
+    "apps".scanApps()
+
+//    kover(project(":time_tracking_api"))
 }
 
 koverReport {

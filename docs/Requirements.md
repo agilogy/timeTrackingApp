@@ -15,8 +15,8 @@
 - [ ] Any needed database change is written as a migration that can be run automatically by our deployment chain
 - [ ] If/When security is already implemented, the feature authorization is implemented
 - [ ] There are automated tests of all the domain (with test doubles for repositories)
-- [ ] There are automated integration tests for any new operation in the driven adapters
-- [ ] There are automated tests for any new endpoint in the HTTP API (either using the domain or mocking it)
+- [ ] There are automated integration tests for any new or changed operation in the driven adapters
+- [ ] There are automated tests for any new or changed endpoint in the HTTP API (either using the domain or mocking it)
 - [ ] There are automated tests for the feature authorization (either at the HTTP API level or the domain leve)
 
 ### Not in list
