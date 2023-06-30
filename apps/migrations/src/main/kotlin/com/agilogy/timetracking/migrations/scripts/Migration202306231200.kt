@@ -4,7 +4,7 @@ import com.agilogy.db.sql.Sql.update
 import com.agilogy.timetracking.migrations.KotlinMigration
 import java.sql.Connection
 
-class Migration20230623 : KotlinMigration("20230623", "Initial migration") {
+class Migration202306231200 : KotlinMigration("202306231200", "Initial migration") {
 
     context(Connection)
     override suspend fun migrate() {
