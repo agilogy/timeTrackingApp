@@ -10,7 +10,7 @@ class Migration20230623 : KotlinMigration("20230623", "Initial migration") {
     override suspend fun migrate() {
         update(
             """
-            |create table time_entries(
+            |create table if not exists time_entries(
             |id serial,
             |developer text not null, 
             |project text not null, 
