@@ -8,6 +8,10 @@ object Dependencies {
     val suspendApp = "$arrowKt:suspendapp:0.4.1-alpha.5"
     val suspendAppKtor = "$arrowKt:suspendapp-ktor:0.4.1-alpha.5"
 
+    val flyway = "org.flywaydb"
+    val flywayVersion = "9.17.0"
+    val flywayCore = "$flyway:flyway-core:$flywayVersion"
+
     val kotlincsv = "com.github.doyaaaaaken:kotlin-csv-jvm:1.9.1"
     val kolinx = "org.jetbrains.kotlinx"
     val kotlinxSerializationVersion = "1.5.0"

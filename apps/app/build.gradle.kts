@@ -38,6 +38,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":postgresdb"))
     implementation(project(":httpapi"))
+    implementation(project(":herokupostgres"))
     implementation(suspendApp)
     implementation(suspendAppKtor)
     implementation(hikariCp)

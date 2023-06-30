@@ -1,18 +1,15 @@
 package com.agilogy.timetracking.app
 
 import arrow.continuations.ktor.server
+import com.agilogy.heroku.postgres.loadHerokuPostgresConfig
 import com.agilogy.timetracking.driveradapters.httpapi.TimeTrackingApi
 import io.ktor.server.netty.Netty
 import kotlinx.coroutines.awaitCancellation
-import java.net.URI
 import kotlin.time.Duration.Companion.seconds
 
 fun main() = app {
-    val dbUri = URI(System.getenv("DATABASE_URL"))
     val port = System.getenv("PORT")?.let { it.toInt() } ?: 8080
-
-    val (username, password) = dbUri.userInfo.split(":")
-    val jdbcUrl = "jdbc:postgresql://" + dbUri.host + ':' + dbUri.port + dbUri.path
+    val (jdbcUrl, username, password) = loadHerokuPostgresConfig()
 
     val timeTrackingApi = TimeTrackingApi(timeTrackingApp(jdbcUrl, username, password))
 
