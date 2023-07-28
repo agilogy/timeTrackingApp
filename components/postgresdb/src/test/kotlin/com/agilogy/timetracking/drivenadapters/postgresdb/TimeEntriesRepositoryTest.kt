@@ -10,6 +10,7 @@ import com.agilogy.timetracking.domain.ProjectName
 import com.agilogy.timetracking.domain.TimeEntriesRepository
 import com.agilogy.timetracking.domain.TimeEntry
 import com.agilogy.timetracking.domain.test.InMemoryTimeEntriesRepository
+import com.agilogy.timetracking.migrations.runMigrations
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.core.test.TestScope
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -42,13 +43,7 @@ class TimeEntriesRepositoryTest : FunSpec() {
 
         withTestDataSource { dataSource ->
             println("Recreating table time_entries")
-            kotlin.runCatching { dataSource.sql { Sql.update("drop table time_entries") } }
-                .recoverIf(Unit) { it is PSQLException && it.sqlState == PostgreSql.UndefinedTable }.getOrThrow()
-            PostgresTimeEntriesRepository.dbMigrations.forEach { dbMigration ->
-                dataSource.sql {
-                    Sql.update(dbMigration)
-                }
-            }
+            runMigrations(dataSource, clean = true)
             f(PostgresTimeEntriesRepository(dataSource))
         }
     }

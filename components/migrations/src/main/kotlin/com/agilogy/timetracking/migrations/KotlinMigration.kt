@@ -1,20 +1,47 @@
 package com.agilogy.timetracking.migrations
 
-import arrow.continuations.SuspendApp
-import com.agilogy.heroku.postgres.loadHerokuPostgresConfig
+import kotlinx.coroutines.runBlocking
 import org.flywaydb.core.Flyway
+import org.flywaydb.core.api.MigrationVersion
 import org.flywaydb.core.api.configuration.FluentConfiguration
+import org.flywaydb.core.api.migration.Context
+import org.flywaydb.core.api.migration.JavaMigration
 import org.slf4j.LoggerFactory
+import java.sql.Connection
+import javax.sql.DataSource
 
-fun main() = SuspendApp {
-    val (jdbcUrl, username, password) = loadHerokuPostgresConfig()
+abstract class KotlinMigration(private val version: String, private val title: String) : JavaMigration {
 
+    override fun getVersion(): MigrationVersion = MigrationVersion.fromVersion(version)
+
+    override fun getDescription(): String = title
+
+    override fun getChecksum(): Int? = null
+
+    override fun canExecuteInTransaction(): Boolean = true
+
+    final override fun migrate(context: Context) = runBlocking {
+        context.connection!!.use {
+            with(it) {
+                migrate()
+            }
+        }
+    }
+
+    context(Connection)
+    abstract suspend fun migrate()
+}
+
+fun runMigrations(
+    dataSource: DataSource,
+    clean: Boolean = false,
+) {
     val flywayConfig: FluentConfiguration = Flyway.configure()
-        .dataSource(jdbcUrl, username, password)
+        .dataSource(dataSource)
         .group(true)
         .outOfOrder(false)
         .baselineOnMigrate(true)
-        .locations("classpath:${this.javaClass.packageName}.scripts")
+        .locations("filesystem:./scripts")
         .loggers("slf4j")
 
     val validated = flywayConfig
@@ -37,5 +64,9 @@ fun main() = SuspendApp {
             )
         }
     }
-    flywayConfig.load().migrate()
+    if (clean) {
+        flywayConfig.cleanDisabled(false)
+        flywayConfig.load().clean()
+    }
+    println(flywayConfig.load().migrate())
 }
