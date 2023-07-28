@@ -1,5 +1,6 @@
 package com.agilogy.timetracking.migrations
 
+import com.agilogy.timetracking.migrations.scripts.Migration202306231200
 import kotlinx.coroutines.runBlocking
 import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.MigrationVersion
@@ -21,10 +22,8 @@ abstract class KotlinMigration(private val version: String, private val title: S
     override fun canExecuteInTransaction(): Boolean = true
 
     final override fun migrate(context: Context) = runBlocking {
-        context.connection!!.use {
-            with(it) {
-                migrate()
-            }
+        with(context.connection!!) {
+            migrate()
         }
     }
 
@@ -32,16 +31,13 @@ abstract class KotlinMigration(private val version: String, private val title: S
     abstract suspend fun migrate()
 }
 
-fun runMigrations(
-    dataSource: DataSource,
-    clean: Boolean = false,
-) {
+fun runMigrations(dataSource: DataSource, clean: Boolean = false) {
     val flywayConfig: FluentConfiguration = Flyway.configure()
         .dataSource(dataSource)
         .group(true)
         .outOfOrder(false)
         .baselineOnMigrate(true)
-        .locations("classpath:${KotlinMigration::class.java.packageName}.scripts")
+        .locations("classpath:${Migration202306231200::class.java.packageName.replace('.', '/')}")
         .loggers("slf4j")
 
     val validated = flywayConfig
@@ -65,8 +61,7 @@ fun runMigrations(
         }
     }
     if (clean) {
-        flywayConfig.cleanDisabled(false)
-        flywayConfig.load().clean()
+        flywayConfig.cleanDisabled(false).load().clean()
     }
     println(flywayConfig.load().migrate())
 }
