@@ -42,7 +42,6 @@ class TimeEntriesRepositoryTest : FunSpec() {
         }
 
         withTestDataSource { dataSource ->
-            println("Recreating table time_entries")
             runMigrations(dataSource, clean = true)
             f(PostgresTimeEntriesRepository(dataSource))
         }

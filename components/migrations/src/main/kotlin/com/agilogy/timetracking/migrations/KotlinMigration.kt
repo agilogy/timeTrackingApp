@@ -41,7 +41,7 @@ fun runMigrations(
         .group(true)
         .outOfOrder(false)
         .baselineOnMigrate(true)
-        .locations("filesystem:./scripts")
+        .locations("classpath:${KotlinMigration::class.java.packageName}.scripts")
         .loggers("slf4j")
 
     val validated = flywayConfig
