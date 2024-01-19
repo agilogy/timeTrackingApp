@@ -28,21 +28,6 @@ class PostgresTimeEntriesRepository(private val dataSource: DataSource) : TimeEn
 
     private fun ResultSetView.project(columnIndex: Int): ProjectName? = string(columnIndex)?.let { ProjectName(it) }
 
-    companion object {
-        val dbMigrations = listOf(
-            """create table time_entries(
-            |id serial,
-            |developer text not null, 
-            |project text not null, 
-            |start timestamptz not null, 
-            |"end" timestamptz not null
-           )
-            """.trimMargin(),
-            """alter table time_entries add column zone_id text not null default 'Europe/Madrid'""",
-            """alter table time_entries alter column zone_id drop default""",
-        )
-    }
-
     override suspend fun saveTimeEntries(timeEntries: List<TimeEntry>) = dataSource.sql {
         val sql = """insert into time_entries(developer, project, start, "end", zone_id) values (?, ?, ?, ?, ?)"""
         batchUpdate(sql) {

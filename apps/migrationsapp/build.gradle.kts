@@ -1,4 +1,4 @@
-import Dependencies.flywayCore
+
 import Dependencies.kotestRunnerJunit
 import Dependencies.postgresql
 import Dependencies.slf4jProvider
@@ -33,7 +33,7 @@ application {
 dependencies {
     implementation(slf4jProvider)
     implementation(postgresql)
-    implementation(flywayCore)
+    implementation(project(":migrations"))
     implementation(project(":db"))
     implementation(project(":postgresdb"))
     implementation(project(":herokupostgres"))

@@ -6,6 +6,10 @@ build:
 test:
 	./gradlew test
 
+.PHONY: format
+format:
+	./gradlew --continue ktlintFormat
+
 .PHONY: deploy
 deploy:
 	./gradlew build -x test -x check
