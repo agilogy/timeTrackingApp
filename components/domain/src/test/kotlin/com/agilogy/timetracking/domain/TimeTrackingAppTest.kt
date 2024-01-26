@@ -1,10 +1,12 @@
 package com.agilogy.timetracking.domain
 
+import arrow.core.Tuple5
 import com.agilogy.timetracking.domain.test.InMemoryTimeEntriesRepository
 import io.kotest.core.spec.style.FunSpec
 import org.junit.jupiter.api.Assertions.assertEquals
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 
 class TimeTrackingAppTest : FunSpec() {
@@ -90,6 +92,87 @@ class TimeTrackingAppTest : FunSpec() {
             assertEquals(expected, result)
         }
 
-        // TODO: Specially test the logic in listTimeEntries
+        test("Get a list of time entries") {
+            val timeEntriesRepository = InMemoryTimeEntriesRepository(
+                listOf(
+                    TimeEntry(
+                        developer,
+                        project,
+                        start..now,
+                        zoneId,
+                    ),
+                ),
+            )
+            val app = TimeTrackingAppPrd(timeEntriesRepository)
+            val range = LocalDate.now()..LocalDate.now()
+
+            val result = app.listTimeEntries(range, developer)
+
+            val expected = listOf(
+                Tuple5(developer, project, LocalDate.now(), start.localTime()..now.localTime(), zoneId),
+            )
+            assertEquals(expected, result)
+        }
+
+        test("Gets two time entries when a time entry starts and ends in different dates") {
+            val timeEntriesRepository = InMemoryTimeEntriesRepository(
+                listOf(
+                    TimeEntry(
+                        developer,
+                        project,
+                        start..now.plusSeconds(60 * 60 * 24),
+                        zoneId,
+                    ),
+                ),
+            )
+            val app = TimeTrackingAppPrd(timeEntriesRepository)
+            val range = LocalDate.now()..LocalDate.now().plusDays(1)
+
+            val result = app.listTimeEntries(range, developer)
+
+            val expected = listOf(
+                Tuple5(developer, project, LocalDate.now(), start.localTime()..LocalTime.of(23, 59, 59), zoneId),
+                Tuple5(developer, project, LocalDate.now().plusDays(1), LocalTime.of(0, 0)..now.localTime(), zoneId),
+            )
+            assertEquals(expected, result)
+        }
+
+        test("Does not include time entries that don´t end within the date range") {
+            val timeEntriesRepository = InMemoryTimeEntriesRepository(
+                listOf(
+                    TimeEntry(
+                        developer,
+                        project,
+                        start..now.plusSeconds(60 * 60 * 24),
+                        zoneId,
+                    ),
+                ),
+            )
+            val app = TimeTrackingAppPrd(timeEntriesRepository)
+            val range = LocalDate.now()..LocalDate.now()
+
+            val result = app.listTimeEntries(range, developer)
+
+            assert(result.isEmpty())
+        }
+
+        test("Does not include time entries that don´t start within the date range") {
+            val timeEntriesRepository = InMemoryTimeEntriesRepository(
+                listOf(
+                    TimeEntry(
+                        developer,
+                        project,
+                        start.minusSeconds(60 * 60 * 24)..now,
+                        zoneId,
+                    ),
+                ),
+            )
+            val app = TimeTrackingAppPrd(timeEntriesRepository)
+            val range = LocalDate.now()..LocalDate.now()
+
+            val result = app.listTimeEntries(range, developer)
+
+            assert(result.isEmpty())
+        }
     }
 }
