@@ -13,22 +13,30 @@ import java.time.LocalDate
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
-class InMemoryTimeEntriesRepository(initialState: List<TimeEntry> = emptyList()) : TimeEntriesRepository {
+data class TimeEntriesState(val timeEntries: List<TimeEntry>) {
+    companion object {
+        fun empty() = TimeEntriesState(emptyList())
+    }
+    fun withTimeEntries(newTimeEntries: List<TimeEntry>): TimeEntriesState = copy(timeEntries = timeEntries + newTimeEntries)
+}
 
-    private val state = mutableListOf<TimeEntry>()
+
+class InMemoryTimeEntriesRepository(initialState: TimeEntriesState) : TimeEntriesRepository {
+
+    private val internalState = mutableListOf<TimeEntry>()
 
     init {
-        state.addAll(initialState)
+        internalState.addAll(initialState.timeEntries)
     }
 
     override suspend fun saveTimeEntries(timeEntries: List<TimeEntry>) {
-        state.addAll(timeEntries)
+        internalState.addAll(timeEntries)
     }
 
     override suspend fun getHoursByDeveloperAndProject(
         range: ClosedRange<Instant>,
     ): Map<Pair<DeveloperName, ProjectName>, Hours> =
-        state.filterIsIn(range)
+        internalState.filterIsIn(range)
             .groupBy({ it.developer to it.project }) { it.duration }
             .mapValues { Hours(ceil(it.value.sum().inWholeSeconds / 3_600.0).toInt()) }
 
@@ -40,7 +48,7 @@ class InMemoryTimeEntriesRepository(initialState: List<TimeEntry> = emptyList())
         developer: DeveloperName,
         dateRange: ClosedRange<LocalDate>,
     ): List<Triple<LocalDate, ProjectName, Hours>> =
-        state
+        internalState
             .filter { it.developer == developer }
             .filterIsIn(dateRange.toInstantRange())
             .groupBy({ it.localDate to it.project }) { it.duration }
@@ -48,9 +56,9 @@ class InMemoryTimeEntriesRepository(initialState: List<TimeEntry> = emptyList())
             .map { (k, v) -> Triple(k.first, k.second, v) }
 
     override suspend fun listTimeEntries(timeRange: ClosedRange<Instant>, developer: DeveloperName?): List<TimeEntry> =
-        state
+        internalState
             .filter { timeEntry -> developer?.let { it == timeEntry.developer } ?: true }
             .filterIsIn(timeRange)
 
-    fun getState(): List<TimeEntry> = state.toList()
+    fun getState(): TimeEntriesState = TimeEntriesState(internalState)
 }
