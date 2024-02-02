@@ -18,6 +18,7 @@ data class TimeEntriesState(val timeEntries: List<TimeEntry>) {
         fun empty() = TimeEntriesState(emptyList())
     }
     fun withTimeEntries(newTimeEntries: List<TimeEntry>): TimeEntriesState = copy(timeEntries = timeEntries + newTimeEntries)
+    fun setTimeEntries(timeEntries: List<TimeEntry>): TimeEntriesState = copy(timeEntries = timeEntries)
 }
 
 
