@@ -1,5 +1,6 @@
 package com.agilogy.timetracking.domain
 
+import arrow.core.Either
 import com.agilogy.timetracking.infrastructure.TimeTrackingAppState
 import com.agilogy.timetracking.infrastructure.TimeTrackingFakeApp
 import io.kotest.core.spec.style.FunSpec
@@ -25,22 +26,13 @@ class TimeTrackingAppTest : FunSpec() {
             assert(finalState == expectedFinalState)
         }
 
-//        test("Get hours per developer") {
-//            val timeEntriesRepository = InMemoryTimeEntriesRepository(
-//                listOf(
-//                    TimeEntry(
-//                        developer,
-//                        project,
-//                        start..now,
-//                        zoneId,
-//                    ),
-//                ),
-//            )
-//            val app = TimeTrackingAppPrd(timeEntriesRepository)
-//            val result = app.getDeveloperHours(start..now)
-//            val expected = mapOf((developer to project) to Hours(hours))
-//            assertEquals(expected, result)
-//        }
+        test("Get hours per developer") {
+            val currentTimeEntries = listOf(TimeEntry(developer, project, start..now, zoneId))
+            val initialState = TimeTrackingAppState.empty().withTimeEntries(currentTimeEntries)
+            val (finalState, result) = TimeTrackingFakeApp.withTimeTrackingApp(initialState) { app -> app.getDeveloperHours(start..now) }
+            assertEquals(result, Either.Right(mapOf(Pair(Pair(developer, project), Hours(1)))))
+            assert(finalState == initialState)
+        }
 
         // TODO: Test the other methods of the app
 
