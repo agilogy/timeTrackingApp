@@ -3,6 +3,7 @@ package com.agilogy.timetracking.domain
 import arrow.core.Tuple5
 import com.agilogy.timetracking.domain.test.InMemoryTimeEntriesRepository
 import io.kotest.core.spec.style.FunSpec
+import org.junit.jupiter.api.Assertions.assertEquals
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -27,6 +28,8 @@ class TimeTrackingAppTestAllTheDomain: FunSpec()  {
             val start = expectedLocalDate.atTime(8, 0).atZone(zoneId).toInstant()
             val end = start.plusSeconds(3600)
             val includedRange = start..end
+            val expectedRange = start.localTime() .. end.localTime()
+
             val queryRange = expectedLocalDate.minusDays(1)..expectedLocalDate.plusDays(1)
             val selectedEntries = listOf(
                     TimeEntry(
@@ -52,8 +55,17 @@ class TimeTrackingAppTestAllTheDomain: FunSpec()  {
             )
             val initialState = selectedEntries + otherDeveloperEntries
             val expected = selectedEntries.map {
-                Tuple5(selectedDeveloper, selectedProject, expectedLocalDate, includedRange, zoneId)
+                Tuple5(selectedDeveloper, selectedProject, expectedLocalDate, expectedRange, zoneId)
             }
+            val repository = InMemoryTimeEntriesRepository(initialState)
+
+            val app = TimeTrackingAppPrd(repository)
+
+            val result = app.listTimeEntries(queryRange, selectedDeveloper)
+            val finalState = repository.getState()
+
+            assertEquals(expected, result)
+            assertEquals(initialState, finalState)
 
         }
 
