@@ -21,7 +21,7 @@ data class TimeEntriesState(val timeEntries: List<TimeEntry>) {
 }
 
 
-class InMemoryTimeEntriesRepository(initialState: TimeEntriesState) : TimeEntriesRepository {
+class InMemoryTimeEntriesRepository(initialState: TimeEntriesState = TimeEntriesState.empty()) : TimeEntriesRepository {
 
     private val internalState = mutableListOf<TimeEntry>()
 

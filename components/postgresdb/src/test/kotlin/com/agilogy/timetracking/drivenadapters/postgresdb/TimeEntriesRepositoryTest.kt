@@ -10,6 +10,7 @@ import com.agilogy.timetracking.domain.ProjectName
 import com.agilogy.timetracking.domain.TimeEntriesRepository
 import com.agilogy.timetracking.domain.TimeEntry
 import com.agilogy.timetracking.domain.test.InMemoryTimeEntriesRepository
+import com.agilogy.timetracking.domain.test.TimeEntriesState
 import com.agilogy.timetracking.migrations.runMigrations
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.core.test.TestScope
@@ -79,13 +80,22 @@ class TimeEntriesRepositoryTest : FunSpec() {
         val p = ProjectName("p")
         val p2 = ProjectName("p2")
 
-        fun test(name: String, test: suspend TestScope.(TimeEntriesRepository) -> Unit) {
+        fun <A>test(name: String, initialState: TimeEntriesState,
+                    test: suspend TestScope.(TimeEntriesRepository) -> A,
+                    assertions:(A, TimeEntriesState) -> Unit) {
             context(name) {
                 this.test("Postgres") {
-                    withPostgresTestRepo { test(it) }
+                    withPostgresTestRepo {
+                        val result = test(it)
+                        val finalState = TODO("create a test repo with a select all function")
+                        assertions(result, finalState)
+                    }
                 }
                 this.test("In Memory") {
-                    withInMemoryTestRepo { test(it) }
+                    withInMemoryTestRepo {
+                        val result = test(it)
+                        assertions(result, (it as InMemoryTimeEntriesRepository).getState())
+                    }
                 }
             }
         }
