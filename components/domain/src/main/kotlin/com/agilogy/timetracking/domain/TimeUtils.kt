@@ -34,5 +34,5 @@ fun YearMonth.toInstantRange(): ClosedRange<Instant> =
 fun YearMonth.toLocalDateRange(): ClosedRange<LocalDate> =
     atDay(1)..atEndOfMonth()
 
-fun Instant.localTime(): LocalTime = atZone(ZoneId.systemDefault()).toLocalTime()
-fun Instant.localDate(): LocalDate = atZone(ZoneId.systemDefault()).toLocalDate()
+fun Instant.localTime(zoneId: ZoneId = ZoneId.systemDefault()): LocalTime = atZone(zoneId).toLocalTime()
+fun Instant.localDate(zoneId: ZoneId = ZoneId.systemDefault()): LocalDate = atZone(zoneId).toLocalDate()

@@ -4,33 +4,22 @@ import arrow.core.Tuple5
 import com.agilogy.timetracking.domain.test.InMemoryTimeEntriesRepository
 import io.kotest.core.spec.style.FunSpec
 import org.junit.jupiter.api.Assertions.assertEquals
-import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.ZoneId
 
 class TimeTrackingAppTestAllTheDomain: FunSpec()  {
     init {
-        /*
-        val hours = 1
-        val start = now.minusSeconds(hours * 3600L)
-        val developer = DeveloperName("John")
-        val project = ProjectName("Acme Inc.")
-        val zoneId: ZoneId = ZoneId.of("Australia/Sydney")
-
-         */
-
         test("List time entries when there are multiple developers") {
             val selectedDeveloper = DeveloperName("developer1")
             val selectedProject = ProjectName("project1")
+            val localDate = LocalDate.of(2024, 1, 26)
             val zoneId = ZoneId.systemDefault()
-            val expectedLocalDate = LocalDate.of(2024, 1, 26)
-            val start = expectedLocalDate.atTime(8, 0).atZone(zoneId).toInstant()
+            val start = localDate.atTime(8, 0).atZone(zoneId).toInstant()
             val end = start.plusSeconds(3600)
             val includedRange = start..end
-            val expectedRange = start.localTime() .. end.localTime()
+            val expectedRange = start.localTime(zoneId)..end.localTime(zoneId)
 
-            val queryRange = expectedLocalDate.minusDays(1)..expectedLocalDate.plusDays(1)
+            val queryRange = localDate.minusDays(1)..localDate.plusDays(1)
             val selectedEntries = listOf(
                     TimeEntry(
                             developer = selectedDeveloper,
@@ -53,19 +42,26 @@ class TimeTrackingAppTestAllTheDomain: FunSpec()  {
                             zoneId = zoneId
                     )
             )
-            val initialState = selectedEntries + otherDeveloperEntries
-            val expected = selectedEntries.map {
-                Tuple5(selectedDeveloper, selectedProject, expectedLocalDate, expectedRange, zoneId)
-            }
-            val repository = InMemoryTimeEntriesRepository(initialState)
 
+            val initialState = selectedEntries + otherDeveloperEntries
+            val repository = InMemoryTimeEntriesRepository(initialState)
             val app = TimeTrackingAppPrd(repository)
 
-            val result = app.listTimeEntries(queryRange, selectedDeveloper)
-            val finalState = repository.getState()
+            val actualResult = app.listTimeEntries(queryRange, selectedDeveloper)
+            val actualState = repository.getState()
 
-            assertEquals(expected, result)
-            assertEquals(initialState, finalState)
+            val expectedResult = listOf(
+                Tuple5(
+                    first = selectedDeveloper,
+                    second = selectedProject,
+                    third = localDate,
+                    fourth = expectedRange,
+                    fifth = zoneId,
+                )
+            )
+            val expectedState = initialState
+            assertEquals(expectedResult, actualResult)
+            assertEquals(expectedState, actualState)
 
         }
 
