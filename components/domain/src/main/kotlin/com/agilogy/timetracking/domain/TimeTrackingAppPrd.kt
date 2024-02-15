@@ -1,6 +1,7 @@
 package com.agilogy.timetracking.domain
 
 import arrow.core.Tuple5
+import com.agilogy.timetracking.domain.TimeTrackingApp.ListTimeEntriesResult
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -42,11 +43,11 @@ class TimeTrackingAppPrd(private val timeEntriesRepository: TimeEntriesRepositor
         timeEntriesRepository.getDeveloperHoursByProjectAndDate(developer, dateRange)
 
     override suspend fun listTimeEntries(dateRange: ClosedRange<LocalDate>, developer: DeveloperName?):
-        List<Tuple5<DeveloperName, ProjectName, LocalDate, ClosedRange<LocalTime>, ZoneId>> {
+        List<ListTimeEntriesResult> {
         val timeEntries = timeEntriesRepository.listTimeEntries(dateRange.toInstantRange(), developer)
         return timeEntries.flatMap { timeEntry ->
             fun row(date: LocalDate, range: ClosedRange<LocalTime>, zoneId: ZoneId) =
-                Tuple5(timeEntry.developer, timeEntry.project, date, range, zoneId)
+                ListTimeEntriesResult(timeEntry.developer, timeEntry.project, date, range, zoneId)
 
             val res = if (timeEntry.range.endInclusive.localDate() != timeEntry.localDate) {
                 listOf(

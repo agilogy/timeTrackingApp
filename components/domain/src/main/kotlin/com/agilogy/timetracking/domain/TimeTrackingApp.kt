@@ -1,6 +1,5 @@
 package com.agilogy.timetracking.domain
 
-import arrow.core.Tuple5
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -16,8 +15,16 @@ interface TimeTrackingApp {
     suspend fun getDeveloperHoursByProjectAndDate(developer: DeveloperName, dateRange: ClosedRange<LocalDate>):
         List<Triple<LocalDate, ProjectName, Hours>>
 
+    data class ListTimeEntriesResult(
+        val developer: DeveloperName,
+        val projectName: ProjectName,
+        val date: LocalDate,
+        val range: ClosedRange<LocalTime>,
+        val zoneId: ZoneId,
+    )
+
     suspend fun listTimeEntries(dateRange: ClosedRange<LocalDate>, developer: DeveloperName?):
-        List<Tuple5<DeveloperName, ProjectName, LocalDate, ClosedRange<LocalTime>, ZoneId>>
+        List<ListTimeEntriesResult>
 }
 
 @JvmInline
