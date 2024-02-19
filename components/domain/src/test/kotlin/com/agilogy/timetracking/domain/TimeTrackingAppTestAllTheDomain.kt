@@ -9,15 +9,15 @@ import java.time.ZoneId
 class TimeTrackingAppTestAllTheDomain: FunSpec()  {
     init {
         test("List time entries when there are multiple developers") {
-            val fixture = createLastTimeEntriesFixtureWhereThereAreMultipleDevelopers()
-            val repository = InMemoryTimeEntriesRepository(fixture.initialState.timeEntries)
+            val scenario = createLastTimeEntriesScenarioWhereThereAreMultipleDevelopers()
+            val repository = InMemoryTimeEntriesRepository(scenario.initialState.timeEntries)
             val app = TimeTrackingAppPrd(repository)
 
-            val actualResult = app.listTimeEntries(fixture.inputQueryRange, fixture.inputDeveloper)
+            val actualResult = app.listTimeEntries(scenario.inputQueryRange, scenario.inputDeveloper)
             val actualState = repository.getState()
 
-            assertEquals(fixture.expectedResult, actualResult)
-            assertEquals(fixture.expectedState, actualState)
+            assertEquals(scenario.expectedResult, actualResult)
+            assertEquals(scenario.expectedState, actualState)
         }
 
         test("List time entries for a developer with multiple projects") {}
@@ -33,7 +33,14 @@ class TimeTrackingAppTestAllTheDomain: FunSpec()  {
         val timeEntries: List<TimeEntry>,
     )
 
-    data class ListTimeEntriesFixture(
+    data class TestScenario<I>(
+        val initialState: AppState,
+        val input: I,
+        val expectedResult: List<TimeTrackingApp.ListTimeEntriesResult>,
+        val expectedState: AppState,
+    )
+
+    data class ListTimeEntriesTestScenario(
         val initialState: AppState,
         val inputQueryRange: ClosedRange<LocalDate>,
         val inputDeveloper: DeveloperName?,
@@ -41,7 +48,7 @@ class TimeTrackingAppTestAllTheDomain: FunSpec()  {
         val expectedState: AppState,
     )
 
-    private fun createLastTimeEntriesFixtureWhereThereAreMultipleDevelopers(): ListTimeEntriesFixture {
+    private fun createLastTimeEntriesScenarioWhereThereAreMultipleDevelopers(): ListTimeEntriesTestScenario {
         val selectedDeveloper = DeveloperName("developer1")
         val selectedProject = ProjectName("project1")
         val localDate = LocalDate.of(2024, 1, 26)
@@ -88,7 +95,7 @@ class TimeTrackingAppTestAllTheDomain: FunSpec()  {
                 zoneId = zoneId,
             )
         )
-        return ListTimeEntriesFixture(
+        return ListTimeEntriesTestScenario(
             initialState = initialState,
             inputQueryRange = queryRange,
             inputDeveloper = selectedDeveloper,
