@@ -11,6 +11,10 @@ plugins {
     id("java")
 }
 
+repositories {
+    mavenCentral()
+}
+
 tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "com.agilogy.timetracking.app.ApiServerKt"
@@ -39,6 +43,7 @@ dependencies {
     implementation(project(":postgresdb"))
     implementation(project(":httpapi"))
     implementation(project(":herokupostgres"))
+    implementation("net.dv8tion:JDA:5.0.0-alpha.22")
     implementation(suspendApp)
     implementation(suspendAppKtor)
     implementation(hikariCp)
