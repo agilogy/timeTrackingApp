@@ -18,6 +18,8 @@ interface TimeTrackingApp {
 
     suspend fun listTimeEntries(dateRange: ClosedRange<LocalDate>, developer: DeveloperName?):
         List<Tuple5<DeveloperName, ProjectName, LocalDate, ClosedRange<LocalTime>, ZoneId>>
+
+    suspend fun listProjects(): List<ProjectName>
 }
 
 @JvmInline

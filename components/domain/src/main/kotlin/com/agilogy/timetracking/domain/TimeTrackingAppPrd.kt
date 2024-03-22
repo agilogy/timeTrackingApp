@@ -74,4 +74,6 @@ class TimeTrackingAppPrd(private val timeEntriesRepository: TimeEntriesRepositor
             res
         }
     }
+
+    override suspend fun listProjects(): List<ProjectName> = listOf(ProjectName("Agilogy school"))
 }
