@@ -12,14 +12,13 @@ class EventsListener(private val timeTrackingApp: TimeTrackingApp) : ListenerAda
 
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    //This gets called when a slash command gets used.
+    // This gets called when a slash command gets used.
     override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
-
-        //Check if this is our /ping command
+        // Check if this is our /ping command
         if (event.name == "ping2") {
             logger.info("Command /ping got used")
 
-            //Reply to the user
+            // Reply to the user
             val startTime = System.currentTimeMillis()
             event.reply("Ping ...").setEphemeral(true).queue {
                 it.editOriginal("Pong: ${System.currentTimeMillis() - startTime}ms").queue()
@@ -28,11 +27,10 @@ class EventsListener(private val timeTrackingApp: TimeTrackingApp) : ListenerAda
     }
 
     override fun onMessageReceived(event: MessageReceivedEvent) = runBlocking {
-
         try {
             logger.info("Message received: ${event.message.contentRaw} by ${event.author}")
 
-            if (!event.author.isBot){
+            if (!event.author.isBot) {
                 val response = if (event.message.contentRaw.trim().lowercase() == "projectes") {
                     timeTrackingApp.listProjects().joinToString(", ") { it.name }
                 } else {
@@ -43,6 +41,5 @@ class EventsListener(private val timeTrackingApp: TimeTrackingApp) : ListenerAda
         } catch (e: Exception) {
             logger.error("Unexpected exception", e)
         }
-
     }
 }

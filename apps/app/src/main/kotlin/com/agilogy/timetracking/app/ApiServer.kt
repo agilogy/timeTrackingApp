@@ -1,7 +1,6 @@
 package com.agilogy.timetracking.app
 
 import arrow.continuations.ktor.server
-import com.agilogy.heroku.postgres.loadHerokuPostgresConfig
 import com.agilogy.timetracking.domain.TimeTrackingApp
 import com.agilogy.timetracking.driveradapters.httpapi.TimeTrackingApi
 import io.ktor.server.netty.Netty
