@@ -2,6 +2,7 @@ package com.agilogy.timetracking.app
 
 import com.agilogy.timetracking.domain.TimeTrackingApp
 import kotlinx.coroutines.runBlocking
+import net.dv8tion.jda.api.entities.channel.ChannelType
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -30,7 +31,7 @@ class EventsListener(private val timeTrackingApp: TimeTrackingApp) : ListenerAda
         try {
             logger.info("Message received: ${event.message.contentRaw} by ${event.author}")
 
-            if (!event.author.isBot) {
+            if (!event.author.isBot && event.channelType == ChannelType.PRIVATE) {
                 val response = if (event.message.contentRaw.trim().lowercase() == "projectes") {
                     timeTrackingApp.listProjects().joinToString(", ") { it.name }
                 } else {
