@@ -15,9 +15,11 @@ repositories {
     mavenCentral()
 }
 
+val myMainClass = "com.agilogy.timetracking.app.MainKt"
+
 tasks.withType<Jar> {
     manifest {
-        attributes["Main-Class"] = "com.agilogy.timetracking.app.ApiServerKt"
+        attributes["Main-Class"] = myMainClass
     }
     // To avoid the duplicate handling strategy error
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -31,7 +33,7 @@ tasks.withType<Jar> {
     })
 }
 application {
-    mainClass.set("com.agilogy.timetracking.app.AppKt")
+    mainClass.set(myMainClass)
 }
 
 dependencies {
