@@ -9,7 +9,7 @@ plugins {
     id("java")
 }
 
-val mainClassCompleteName = "com.agilogy.timetracking.migrations.MigrateDbKt"
+val mainClassCompleteName = "com.agilogy.timetracking.migrationsapp.MigrateDbKt"
 
 tasks.withType<Jar> {
     manifest {
