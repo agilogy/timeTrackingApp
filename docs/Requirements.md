@@ -44,7 +44,7 @@
 
 ### Invoicing report
 
-- [ ] Get a report of total hours for a month (or between dates) broken down by project and developer
+- [ ] Get a report of total hours for a month (or between dates) broken down by project and developer. See [example](invoicingReportExample.md).
 
 ### Authentication & Authorization 
 

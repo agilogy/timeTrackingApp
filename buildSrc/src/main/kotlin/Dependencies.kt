@@ -22,6 +22,9 @@ object Dependencies {
     val kotest = "io.kotest"
     val kotestVersion = "5.6.1"
     val kotestRunnerJunit = "$kotest:kotest-runner-junit5:$kotestVersion"
+    val kotestProperty = "$kotest:kotest-property:$kotestVersion"
+    val kotestPropertyDatetime = "$kotest:kotest-property-datetime:$kotestVersion"
+    val kotestPropertyArbs = "$kotest:kotest-property-arbs:$kotestVersion"
 
     val ktorVersion = "2.3.0"
     val ktorServerCore = "io.ktor:ktor-server-core-jvm:$ktorVersion"
