@@ -52,25 +52,6 @@ class TimeTrackingAppTest : FunSpec() {
             assertEquals(initialTimeEntries, timeEntriesRepository.getState())
         }
 
-        fun sum(a: Int, b: Int) = a + b
-        test("sum") {
-            val a = 3
-            val b = 4
-            val res = sum(a, b)
-            assertEquals(7, res)
-        }
-        // associativa
-        // Per tot a, b, c, a + (b + c) = (a + b) + c
-        TODO()
-
-        // commutativa
-        // Per tot a, b, a + b = b + a
-        TODO()
-
-        // neutre
-        // Per tot a, a + 0 = 0 + a = a
-        TODO()
-
         test("List my time entries returns the user time entries") {
             // Arrange (initial state)
             val zone = ZoneId.of("Europe/Madrid")

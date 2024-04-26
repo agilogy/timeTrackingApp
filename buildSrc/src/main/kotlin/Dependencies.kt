@@ -20,11 +20,11 @@ object Dependencies {
     val kotlinXCoroutinesCore = "$kolinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
 
     val kotest = "io.kotest"
-    val kotestVersion = "5.6.1"
+    val kotestVersion = "5.8.1"
     val kotestRunnerJunit = "$kotest:kotest-runner-junit5:$kotestVersion"
     val kotestProperty = "$kotest:kotest-property:$kotestVersion"
-    //val kotestPropertyDatetime = "$kotest.extensions:kotest-property-datetime:2.0.0"
-    //val kotestPropertyArbs = "$kotest.extensions:kotest-property-arbs:2.1.2"
+    val kotestPropertyDatetime = "$kotest.extensions:kotest-property-datetime:2.0.0"
+    val kotestPropertyArbs = "$kotest.extensions:kotest-property-arbs:2.1.2"
 
     val ktorVersion = "2.3.0"
     val ktorServerCore = "io.ktor:ktor-server-core-jvm:$ktorVersion"
