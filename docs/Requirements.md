@@ -2,28 +2,28 @@
 
 ## Requirements (as epics)
 
-- [ ] Initial setup  (see below)
-- [ ] Authentication & Authorization (see below)
-- [ ] Inform time entries  (see below)
+- [x] Initial setup  (see below)
 - [ ] Listing of my own time entries
+- [ ] Inform time entries  (see below)
 - [ ] Invoicing report  (see below)
+- [ ] Authentication & Authorization (see below)
 
 ## Definition of Done for functional requirements
 
 - [ ] The feature is implemented
-- [ ] The feature is made available in the HTTP API
+- [ ] The feature is made available in the HTTP API & Discord bot
 - [ ] Any needed database change is written as a migration that can be run automatically by our deployment chain
-- [ ] If/When security is already implemented, the feature authorization is implemented
 - [ ] There are automated tests of all the domain (with test doubles for repositories)
 - [ ] There are automated integration tests for any new or changed operation in the driven adapters
-- [ ] There are automated tests for any new or changed endpoint in the HTTP API (either using the domain or mocking it)
-- [ ] There are automated tests for the feature authorization (either at the HTTP API level or the domain leve)
+- [ ] There are automated tests for any new or changed endpoint in the HTTP API (either using the domain or mocking it) & new or changed Discord bot interactions (driver adapters)
+- [ ] If/When security is already implemented, the feature authorization is implemented
+- [ ] If/When security is already implemented, there are automated tests for the feature authorization (either at the HTTP API level or the domain leve.)
 
 ### Not in list
 
 - We assume migrations can't be reverted automatically. Let's discuss whether that is doable in the future and assume 
   the risks.
-- We assume there is no UI nor any other form of access to the app other than the HTTP API. These could be added as
+- We assume there is no GUI nor any other form of access to the app other than the HTTP API and the Discord bot. These could be added as
   new features in the future.
 
 ## Initial setup
@@ -31,7 +31,7 @@
 - [x] The application is deployed in Heroku
 - [x] The application is usable via an HTTP API in Json
 - [x] Remove the example console application
-- [ ] The application runs the migrations on each deployment / start up
+- [x] The application runs the migrations on each deployment / start up
 
 ### Inform time entries
 
