@@ -14,7 +14,6 @@ import com.agilogy.timetracking.domain.TimeEntry
 import com.agilogy.timetracking.domain.toInstantRange
 import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 import javax.sql.DataSource
 import kotlin.math.ceil
 
@@ -29,7 +28,7 @@ class PostgresTimeEntriesRepository(private val dataSource: DataSource) : TimeEn
     private fun ResultSetView.project(columnIndex: Int): ProjectName? = string(columnIndex)?.let { ProjectName(it) }
 
     override suspend fun saveTimeEntries(timeEntries: List<TimeEntry>) = dataSource.sql {
-        val sql = """insert into time_entries(developer, project, start, "end", zone_id) values (?, ?, ?, ?, ?)"""
+        val sql = """insert into time_entries(developer, project, start, "end") values (?, ?, ?, ?)"""
         batchUpdate(sql) {
             timeEntries.forEach {
                 addBatch(
@@ -37,7 +36,6 @@ class PostgresTimeEntriesRepository(private val dataSource: DataSource) : TimeEn
                     it.project.param,
                     it.range.start.param,
                     it.range.endInclusive.param,
-                    it.zoneId.id.param,
                 )
             }
         }
@@ -81,7 +79,7 @@ class PostgresTimeEntriesRepository(private val dataSource: DataSource) : TimeEn
 
     override suspend fun listTimeEntries(timeRange: ClosedRange<Instant>, developer: DeveloperName?): List<TimeEntry> =
         dataSource.sql {
-            val sql = """select developer, project, start, "end", zone_id 
+            val sql = """select developer, project, start, "end"
             |from time_entries 
             |where "end" > ? and start < ?
             """.trimMargin()
@@ -90,7 +88,6 @@ class PostgresTimeEntriesRepository(private val dataSource: DataSource) : TimeEn
                     it.developer(1)!!,
                     it.project(2)!!,
                     it.timestamp(3)!!..it.timestamp(4)!!,
-                    ZoneId.of(it.string(5)!!),
                 )
             }
         }

@@ -15,8 +15,7 @@ class Migration202306231200 : KotlinMigration("202306231200", "Initial migration
             |developer text not null, 
             |project text not null, 
             |start timestamptz not null, 
-            |"end" timestamptz not null,
-            |zone_id text not null
+            |"end" timestamptz not null
             |)
             """.trimMargin(),
         )
