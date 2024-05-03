@@ -30,8 +30,8 @@ object Sql {
         }
 
     suspend fun <A> DataSource.sql(f: suspend context(Connection) () -> A): A = withContext(Dispatchers.IO) {
-        with(connection) {
-            f(this@with)
+        connection.use {
+            f(it)
         }
     }
 
