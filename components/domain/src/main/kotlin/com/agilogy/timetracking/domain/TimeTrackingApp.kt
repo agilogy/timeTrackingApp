@@ -14,6 +14,11 @@ interface TimeTrackingApp {
     suspend fun getDeveloperHoursByProjectAndDate(developer: DeveloperName, dateRange: ClosedRange<LocalDate>):
         List<Triple<LocalDate, ProjectName, Hours>>
 
+    /**
+     * - Returns only time entries by the given developer (if one is provided)
+     * - Returns only time entries in the given range
+     * - Returns time entries sorted by start time ascending
+     */
     suspend fun listTimeEntries(range: ClosedRange<Instant>, developer: DeveloperName?): List<TimeEntry>
 
     suspend fun listProjects(): List<ProjectName>
